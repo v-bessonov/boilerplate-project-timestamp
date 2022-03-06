@@ -26,7 +26,6 @@ app.get("/api/hello", function (req, res) {
 app.get("/api/:date?", function (req, res) {
   let { date } = { ...req.params };
   let re1 = /^\d+$/;
-  let re2 = /^\d{4}-\d{2}-\d{2}$/;
   let re3 = /^\s*$/;
 
   let result = { error: "Invalid Date" };
@@ -36,12 +35,17 @@ app.get("/api/:date?", function (req, res) {
     const dt = new Date(epoch);
     result = { unix: dt.getTime(), utc: dt.toUTCString() };
   }
-  if (re2.test(date)) {
-    const dt = new Date(date);
-    result = { unix: dt.getTime(), utc: dt.toUTCString() };
-  }
   if (!date || re3.test(date)) {
     const dt = new Date();
+    result = { unix: dt.getTime(), utc: dt.toUTCString() };
+  }
+  const dt = new Date(date);
+  console.log(dt);
+  if (dt == "Invalid Date") {
+    result = {
+      error: "Invalid Date",
+    };
+  } else {
     result = { unix: dt.getTime(), utc: dt.toUTCString() };
   }
 
